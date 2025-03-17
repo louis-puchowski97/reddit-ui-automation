@@ -1,0 +1,20 @@
+{
+  "name": "practice",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js tests/features/**/*.feature --require tests/steps/**/*.ts --require-module ts-node/register"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@cucumber/cucumber": "^9.0.1",
+    "@playwright/test": "^1.31.2",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  }
+}

@@ -7,7 +7,7 @@ import { World } from "../support/world.ts"
 
 When('I enter valid registration details', async function (this: World) {
     await this.redditRegistrationPage.signUp("test.user@test.com");
-    let abc = await this.redditRegistrationPage.shadowUsername.innerText();
+    let abc = await this.redditRegistrationPage.shadowRegisterUsername.innerText();
 });
 
 Then('I should be registered successfully', async function () {

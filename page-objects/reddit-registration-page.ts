@@ -4,15 +4,19 @@ export class RedditRegistrationPage {
     page: Page;
     shadowEmail: Locator;
     shadowSkip: Locator;
-    shadowUsername: Locator;
-    shadowPassword: Locator;
+    shadowRegisterUsername: Locator;
+    shadowRegisterPassword: Locator;
+    shadowLoginUsername: Locator;
+    shadowLoginPassword: Locator;
 
     constructor(page: Page) {
         this.page = page;
         this.shadowEmail = page.locator('#register-email').locator('input[name="email"]');
         this.shadowSkip = page.locator('auth-flow-modal[pagename="register_email_verification"]').locator('button[name="skip"]');
-        this.shadowUsername = page.locator('#register-username').locator('input[name="username"]');
-        this.shadowPassword = page.locator('#register-password').locator('input[name="password"]');
+        this.shadowRegisterUsername = page.locator('#register-username').locator('input[name="username"]');
+        this.shadowRegisterPassword = page.locator('#register-password').locator('input[name="password"]');
+        this.shadowLoginUsername = page.locator('#login-username').locator('input[name="username"]');
+        this.shadowLoginPassword = page.locator('#login-password').locator('input[name="password"]');
     }
 
     loginButton = '#login-button'
@@ -37,19 +41,11 @@ export class RedditRegistrationPage {
         await this.shadowSkip.click();
     }
 
-    async fillEmail(email: string) {
-        await this.page.fill(this.emailInput, email);
-        await this.page.click(this.submitButton);
-    }
-
-    async fillCredentials(username: string, password: string) {
-        await this.page.fill(this.usernameInput, username);
-        await this.page.fill(this.passwordInput, password);
-        await this.page.click(this.submitButton);
-    }
-
-    async isRegistered() {
-        await this.page.waitForSelector(this.searchBar, { timeout: 10000 });
-        return await this.page.isVisible(this.searchBar);
+    async signIn() {
+        let abc = process.env.REDDIT_USERNAME;
+        await this.page.click(this.loginButton);
+        await this.shadowLoginUsername.fill(process.env.REDDIT_USERNAME);
+        await this.shadowLoginPassword.fill(process.env.REDDIT_PASSWORD);
+        await this.shadowSkip.click();
     }
 }

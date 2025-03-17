@@ -1,0 +1,28 @@
+name: Playwright BDD Automation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-playwright-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Playwright BDD Tests
+        run: npx cucumber-js --require-module ts-node/register --require './test/steps/**/*.ts' --format json:test/results/cucumber-report.json
+        env:
+          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}

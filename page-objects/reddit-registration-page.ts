@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { type Locator, type Page } from '@playwright/test';
 
 export class RedditRegistrationPage {
     page: Page;
@@ -23,14 +23,14 @@ export class RedditRegistrationPage {
     signUpLink = 'auth-flow-link[step="register"]'
     emailInput = '#register-email';
     continue = 'button.continue';
-    usernameInput = 'input[name="username"]';
-    passwordInput = 'input[name="password"]';
     submit = '#login > auth-flow-modal > div.w-100 > faceplate-tracker > button'
     submitButton = 'button[type="submit"]';
     searchBar = '[data-testid="search-bar"]';
+    signInButton = 'button.login';
 
     async navigate() {
         await this.page.goto('https://www.reddit.com/');
+        await this.page.waitForLoadState('load');
     }
 
     async signUp(email: string) {
@@ -42,10 +42,27 @@ export class RedditRegistrationPage {
     }
 
     async signIn() {
-        let abc = process.env.REDDIT_USERNAME;
-        await this.page.click(this.loginButton);
-        await this.shadowLoginUsername.fill(process.env.REDDIT_USERNAME);
-        await this.shadowLoginPassword.fill(process.env.REDDIT_PASSWORD);
-        await this.shadowSkip.click();
+        let isSignedIn = false;
+        // await this.page.waitForLoadState('load');
+
+        while(!isSignedIn) {
+            if((await this.page.isVisible(this.loginButton) == false)) {
+                await this.page.reload();
+                isSignedIn = true;
+            } else {
+                await this.page.click(this.loginButton);
+                await this.shadowLoginUsername.fill(process.env.REDDIT_USERNAME);
+                await this.shadowLoginPassword.fill(process.env.REDDIT_PASSWORD);
+                await this.page.waitForFunction(
+                    `document.querySelector("${this.signInButton}") && !document.querySelector("${this.signInButton}").disabled`,
+                    { timeout: 2000 }
+                );
+
+                await this.page.click(this.signInButton);
+                await this.page.waitForTimeout(2000);
+            }
+
+            await this.page.reload();
+        }
     }
 }

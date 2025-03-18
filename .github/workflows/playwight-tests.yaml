@@ -4,25 +4,26 @@ on:
   push:
     branches:
       - main
+      - master
 
 jobs:
   run-playwright-tests:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      - name: Set environment variables for secrets
+        run: |
+          echo "REDDIT_USERNAME=${{ secrets.REDDIT_USERNAME }}" >> $GITHUB_ENV
+          echo "REDDIT_PASSWORD=${{ secrets.REDDIT_PASSWORD }}" >> $GITHUB_ENV
 
-      - name: Install dependencies
-        run: npm install
+      - name: Print environment variables (for debugging)
+        run: echo "REDDIT_USERNAME=$REDDIT_USERNAME"  # Will be masked in logs
 
-      - name: Run Playwright BDD Tests
-        run: npx cucumber-js --require-module ts-node/register --require './test/steps/**/*.ts' --format json:test/results/cucumber-report.json
+      - name: Run Playwright Test
+        run: npm run test
         env:
           REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
           REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}

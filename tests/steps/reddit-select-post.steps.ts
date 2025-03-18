@@ -5,7 +5,8 @@ When('I order the posts by top voted', async function (this: World) {
 });
 
 When('I click the first post', async function (this: World) {
-    await this.redditHomePage.goToTheTopPost();
+    await this.redditHomePage.sortPostsBySelection();
+    await this.redditHomePage.goToTopPostFromHomePage();
 });
 
 Then('I am on the page for the top post', async function (this: World) {

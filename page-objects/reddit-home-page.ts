@@ -1,48 +1,51 @@
-import { type Locator, type Page } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 
 export class RedditHomePage {
-    page: Page;
-    sortByTop: Locator;
+    private page: Page;
+
+    // Locators
+    private sortByTopLocator: Locator;
+    private sortByButtonLocator: (selection: string) => Locator;
+    private topPostLocator: Locator;
+    private exploreButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
-        this.sortByTop = page
-            .locator("shreddit-async-loader")
-            .locator("shreddit-sort-dropdown")
-            .locator("faceplate-tooltip")
-            .locator("faceplate-tracker")
-            .locator("button");
+
+        // Initialize locators with specific types
+        this.sortByTopLocator = this.page.locator('div[slot="dropdown-items"] a', {
+            has: this.page.locator('span', { hasText: 'Top' })
+        });
+
+        // Function to get sort button locator based on the selection
+        this.sortByButtonLocator = (selection: string) => 
+            this.page.locator('shreddit-sort-dropdown')
+                .locator('faceplate-tooltip')
+                .locator('faceplate-tracker')
+                .locator(`button[aria-label="Sort by: ${selection}"]`);
+
+        // Top post locator, assuming it selects the first post
+        this.topPostLocator = this.page.locator('shreddit-post[feedindex="0"] a[slot="full-post-link"] faceplate-screen-reader-content');
+
+        // Link to go to explore page
+        this.exploreButton = this.page.locator('#explore-communities a');
     }
-    
-    sortByButton = "shreddit-feed[reload-url='/svc/shreddit/feeds/home-feed?sort=BEST'${}";
-    sortByTops = 'li:nth-child(4) a'
 
-    async goToTheTopPost() {
-        const sortButton = this.page
-            .locator('shreddit-sort-dropdown')
-            .locator('faceplate-tooltip')
-            .locator('faceplate-tracker')
-            .locator('button[aria-label="Sort by: Best"]');
-
+    // Method to sort posts by a given selection (default: 'Best')
+    async sortPostsBySelection(selection: string = "Best"): Promise<void> {
+        const sortButton = this.sortByButtonLocator(selection);
+        await sortButton.waitFor({ state: 'visible' });
         await sortButton.click();
+        await this.sortByTopLocator.click();
+    }
 
-        const sortChoiceButton = this.page
-        .locator('div[slot="dropdown-items"] a', {
-            has: this.page.locator('span', { hasText: 'Top'})
-        });
+    // Method to navigate to the top post after sorting
+    async goToTopPostFromHomePage(): Promise<void> {
+        await this.topPostLocator.click();
+    }
 
-        await sortChoiceButton.click();
-
-        const firstPost = this.page
-        .locator('article', {
-            has: this.page.locator('shreddit-post[feedindex="0"]')
-        });
-
-        await this.page.evaluate(() => {
-            const link = document.querySelector('a[href="/target-page"]') as HTMLAnchorElement;
-            link?.click();
-          });
-          
-        await this.page.locator('shreddit-post[feedindex="0"]').locator('a[slot="full-post-link"] faceplate-screen-reader-content').click();
+    // Method to navigate to the top post after sorting
+    async goToExplorePage(): Promise<void> {
+        await this.exploreButton.click();
     }
 }

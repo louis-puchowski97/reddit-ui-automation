@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "cucumber-js tests/features/**/*.feature --require tests/steps/**/*.ts --require-module ts-node/register"
+    "test": "cucumber-js tests/features/**/*.feature --require tests/steps/**/*.ts --require-module ts-node/register",
+    "test-headless": "npm run test -- --profile headless"
   },
   "keywords": [],
   "author": "",

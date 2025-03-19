@@ -1,110 +1,9 @@
-// import { type Locator, type Page } from '@playwright/test';
-// import { randomBytes as cryptoRandomBytes } from 'crypto';
-
-// export class RedditRegistrationPage {
-//     page: Page;
-//     email: Locator;
-//     skip: Locator;
-//     registerUsername: Locator;
-//     registerPassword: Locator;
-//     registerContinue: Locator;
-//     loginUsername: Locator;
-//     loginPassword: Locator;
-
-//     constructor(page: Page) {
-//         this.page = page;
-//         this.email = page.locator('#register-email').locator('input[name="email"]');
-//         this.skip = page.locator('auth-flow-modal[pagename="register_email_verification"]').locator('button[name="skip"]');
-//         this.registerUsername = page.locator('input[name="username"]');
-//         this.registerPassword = page.locator('input[name="password"]');
-//         this.registerContinue = page.locator('button[type="submit"]');
-//         this.loginUsername = page.locator('input[name="username"]');
-//         this.loginPassword = page.locator('input[name="password"]');
-
-//     }
-
-//     loginButton = '#login-button'
-//     signUpLink = 'auth-flow-link[step="register"]'
-//     emailInput = '#register-email';
-//     continue = 'button.continue';
-//     submit = '#login > auth-flow-modal > div.w-100 > faceplate-tracker > button'
-//     submitButton = 'button[type="submit"]';
-//     searchBar = '[data-testid="search-bar"]';
-//     signInButton = 'button.login';
-
-//     async navigate() {
-//         await this.page.goto('https://www.reddit.com/');
-//         await this.page.waitForLoadState('load');
-//     }
-
-//     // Helper function to generate random username and password
-//     private generateRandomString(length: number): string {
-//         const randomData = cryptoRandomBytes(length); // Generate random bytes
-//         return randomData.toString('base64').slice(0, length); // Convert to base64 and slice to the desired length
-//     }
-
-//     // Register with random username and password
-//     async register(): Promise<void> {
-//         const username = this.generateRandomString(10);
-//         const password = this.generateRandomString(10);
-
-        
-//         await this.page.click(this.loginButton);
-//         await this.page.click(this.signUpLink);
-//         await this.email.fill(`${username}@example.com`); // Use a dummy email or generate one if needed
-//         // await this.page.click(this.continue);
-//         // await this.skip.click();
-
-//         // Store the credentials in environment variables
-//         process.env.REDDIT_USERNAME = username;
-//         process.env.REDDIT_PASSWORD = password;
-//     }
-
-//     async signUp(email: string) {
-//         await this.page.click(this.loginButton);
-//         await this.page.click(this.signUpLink);
-//         await this.email.fill(email);
-//         await this.page.click(this.continue);
-//         await this.skip.click();
-//     }
-
-//     async signIn() {
-//         let isSignedIn = false;
-//         // await this.page.waitForLoadState('load');
-
-//         while(!isSignedIn) {
-//             if((await this.page.isVisible(this.loginButton) == false)) {
-//                 await this.page.reload();
-//                 isSignedIn = true;
-//             } else {
-//                 await this.page.click(this.loginButton);
-//                 await this.loginUsername.fill(process.env.REDDIT_USERNAME);
-//                 await this.loginPassword.fill(process.env.REDDIT_PASSWORD);
-//                 await this.page.waitForFunction(
-//                     `document.querySelector("${this.signInButton}") && !document.querySelector("${this.signInButton}").disabled`,
-//                     { timeout: 2000 }
-//                 );
-
-//                 await this.page.click(this.signInButton);
-//                 await this.page.waitForTimeout(2000);
-//             }
-
-//             await this.page.reload();
-//         }
-//     }
-// }
-
-
-
-
-
-
-
 import { Page, Locator } from '@playwright/test';
 import { randomBytes as cryptoRandomBytes } from 'crypto';
 
 export class RedditRegistrationPage {
     private readonly page: Page;
+    private readonly acceptAllCookiesButton: Locator;
 
     // Registration locators
     private readonly emailInput: Locator;
@@ -127,6 +26,7 @@ export class RedditRegistrationPage {
 
     constructor(page: Page) {
         this.page = page;
+        this.acceptAllCookiesButton = this.page.locator('#accept-all-cookies-button');
 
         // Registration locators
         this.emailInput = this.page.locator('input[name="email"]');
@@ -152,6 +52,7 @@ export class RedditRegistrationPage {
     async navigate(): Promise<void> {
         await this.page.goto('https://www.reddit.com/');
         await this.page.waitForLoadState('load');
+        await this.loginButton.waitFor({ state: 'visible' });
     }
 
     // Generate a random string
@@ -216,29 +117,92 @@ export class RedditRegistrationPage {
         process.env.REDDIT_PASSWORD = password;
     }
 
-    // Sign in using stored credentials
     async signIn(): Promise<void> {
         let isSignedIn = false;
-
+        let i = 0;
+    
+        await this.acceptAllCookiesButton.click();
+    
         while (!isSignedIn) {
+    
             if (!(await this.loginButton.isVisible())) {
+                console.log("Already signed in. Reloading...");
                 await this.page.reload();
                 isSignedIn = true;
-            } else {
-                await this.loginButton.click();
-                await this.loginUsernameInput.fill(process.env.REDDIT_USERNAME || '');
-                await this.loginPasswordInput.fill(process.env.REDDIT_PASSWORD || '');
-
-                await this.page.waitForFunction(
-                    `document.querySelector("button.login") && !document.querySelector("button.login").disabled`,
-                    { timeout: 2000 }
-                );
-
-                await this.signInButton.click();
-                await this.page.waitForTimeout(2000);
+                break;
             }
-
-            await this.page.reload();
+    
+            console.log("Attempting login...");
+    
+            await this.loginButton.click();
+            await this.page.waitForTimeout(500);
+    
+            await this.loginUsernameInput.fill(process.env.REDDIT_USERNAME || '');
+            await this.page.waitForTimeout(500);
+    
+            await this.loginPasswordInput.fill(process.env.REDDIT_PASSWORD || '');
+            await this.page.waitForTimeout(500);
+    
+            // Check if button is enabled instead of using waitForFunction
+            if (await this.signInButton.isEnabled()) {
+                await this.signInButton.click();
+            } else {
+                console.log("Sign-in button is disabled. Retrying...");
+            }
+    
+            await this.page.waitForTimeout(5000); // Allow time for login to process
+    
+            if (!(await this.loginButton.isVisible())) {
+                console.log("Login successful!");
+                isSignedIn = true;
+            } else {
+                console.log("Login failed. Retrying...");
+                await this.page.reload();
+            }
+    
+            i++;
+            if (i >= 10) {
+                console.log("Max login attempts reached. Exiting...");
+                throw new Error("Login failed after multiple attempts.");
+            }
         }
     }
+    
+
+    // Sign in using stored credentials
+    // async signIn(): Promise<void> {
+    //     let isSignedIn = false;
+    //     let i = 0;
+    //     await this.acceptAllCookiesButton.click();
+
+    //     while (!isSignedIn) {
+    //         // console.log(await this.page.content());
+    //         if (!(await this.loginButton.isVisible())) {
+    //             await this.page.reload();
+    //             isSignedIn = true;
+    //         } else {
+    //             await this.loginButton.click();
+    //             // await this.page.waitForTimeout(1000);
+    //             await this.loginUsernameInput.fill(process.env.REDDIT_USERNAME || '');
+    //             // await this.page.waitForTimeout(1000);
+    //             await this.loginPasswordInput.fill(process.env.REDDIT_PASSWORD || '');
+    //             // await this.page.waitForTimeout(1000);
+
+                
+    //             await this.page.waitForFunction(
+    //                 `document.querySelector("button.login") && !document.querySelector("button.login").disabled`,
+    //                 { timeout: 2000 }
+    //             );
+                
+    //             await this.signInButton.click();
+    //             await this.page.waitForTimeout(4000);
+    //         }
+            
+    //         await this.page.screenshot({ path: `screenshot${i}.png`, fullPage: true });
+    //         i++;
+    //         // console.log(await this.page.content());
+
+    //         await this.page.reload();
+    //     }
+    // }
 }

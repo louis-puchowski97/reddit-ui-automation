@@ -1,4 +1,4 @@
-@reddit-registration_feature @first
+@first @reddit-registration_feature
 Feature: Reddit Registration
 
   @reddit-registration_register-account

@@ -1,12 +1,12 @@
 @reddit-select-post_feature @third
-Feature: Reddit Registration
+Feature: Reddit Selecting the Top Post
 
   Background: User is logged in
       Given I navigate to the Reddit registration page
         And I sign in
 
   @reddit-select-post_post-can-be-selected
-  Scenario: User registers a new account
+  Scenario: User clicks on the first post when srted by Top
     When I order the posts by top voted
       And I click the first post
     Then I am on the page for the top post

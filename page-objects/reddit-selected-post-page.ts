@@ -6,8 +6,6 @@ export class RedditSelectedPostPage {
     readonly postTitle: Locator;
     readonly communityInformation: Locator;
 
-    readonly commentComposerHost: Locator;
-    readonly commentComposerButton: Locator;
     readonly commentTree: Locator;
     readonly sortCommentDropdown: Locator;
     readonly upvoteButton: Locator;
@@ -34,8 +32,6 @@ export class RedditSelectedPostPage {
         this.communityInformation = page.locator('aside[aria-label="Community information"]');
 
         // Comment-related elements
-        this.commentComposerHost = page.locator('comment-composer-host');
-        this.commentComposerButton = page.locator('comment-composer-host button[data-testid="trigger-button"]');
         this.commentTree = page.locator('shreddit-comment-tree#comment-tree');
         this.sortCommentDropdown = page.locator('button[aria-label="Sort by: Best"]');
 

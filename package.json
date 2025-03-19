@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cucumber-js tests/features/**/*.feature --require tests/steps/**/*.ts --require-module ts-node/register",
-    "test-headless": "npm run test -- --profile headless"
+    "test-headless": "cross-env HEADLESS=true cucumber-js tests/features/**/*.feature --require tests/steps/**/*.ts --require-module ts-node/register"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "^9.0.1",
     "@playwright/test": "^1.31.2",
+    "cross-env": "^7.0.3",
     "ts-node": "^10.9.2"
   },
   "dependencies": {

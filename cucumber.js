@@ -8,4 +8,5 @@ module.exports = {
     requireModule: ["ts-node/register"],
     order: "defined"
   },
+  
 };

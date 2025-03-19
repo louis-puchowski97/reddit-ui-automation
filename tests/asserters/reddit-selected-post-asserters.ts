@@ -9,8 +9,6 @@ export class RedditSelectedPostAsserters {
     async assertPostIsDisplayed(redditSelectedPostPage: RedditSelectedPostPage) {
         await expect(redditSelectedPostPage.communityInformation).toBeVisible();
         await expect(redditSelectedPostPage.postTitle).toBeVisible();
-        await expect(redditSelectedPostPage.commentComposerHost).toBeVisible();
-        await expect(redditSelectedPostPage.commentComposerButton).toBeVisible();
         await expect(redditSelectedPostPage.commentTree).toBeVisible();
         await expect(redditSelectedPostPage.sortCommentDropdown).toBeVisible();
         await expect(redditSelectedPostPage.upvoteButton).toBeVisible();

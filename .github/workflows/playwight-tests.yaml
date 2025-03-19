@@ -1,29 +1,29 @@
-name: Playwright BDD Automation
+name: Playwright Cucumber Tests
 
-on:
+on: 
   push:
     branches:
-      - main
       - master
+  pull_request:
 
 jobs:
-  run-playwright-tests:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set environment variables for secrets
-        run: |
-          echo "REDDIT_USERNAME=${{ secrets.REDDIT_USERNAME }}" >> $GITHUB_ENV
-          echo "REDDIT_PASSWORD=${{ secrets.REDDIT_PASSWORD }}" >> $GITHUB_ENV
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-      - name: Print environment variables (for debugging)
-        run: echo "REDDIT_USERNAME=$REDDIT_USERNAME"  # Will be masked in logs
+      - name: Install dependencies
+        run: npm install
 
-      - name: Run Playwright Test
-        run: npm run test
-        env:
-          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
-          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Cucumber Playwright tests
+        run: npm test

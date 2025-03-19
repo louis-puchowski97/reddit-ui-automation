@@ -1,5 +1,5 @@
 import { When, Then } from '@cucumber/cucumber';
-import { World } from "../support/world.ts"
+import { World } from "../support/world.ts";
 
 When('I order the posts by top voted', async function (this: World) {
 });

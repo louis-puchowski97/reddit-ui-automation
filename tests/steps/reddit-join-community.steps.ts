@@ -1,5 +1,5 @@
 import { When, Then } from '@cucumber/cucumber';
-import { World } from "../support/world.ts"
+import { World } from "../support/world.ts";
 
 When('I go to the explore page', async function (this: World) {
     await this.redditHomePage.goToExplorePage();

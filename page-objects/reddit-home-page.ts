@@ -4,15 +4,17 @@ export class RedditHomePage {
     private page: Page;
 
     // Locators
-    private sortByTopLocator: Locator;
-    private sortByButtonLocator: (selection: string) => Locator;
-    private topPostLocator: Locator;
-    private exploreButton: Locator;
+    readonly userIcon: Locator;
+    private readonly sortByTopLocator: Locator;
+    readonly sortByButtonLocator: (selection: string) => Locator;
+    private readonly topPostLocator: Locator;
+    private readonly exploreButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
 
         // Initialize locators with specific types
+        this.userIcon = this.page.locator('#expand-user-drawer-button');
         this.sortByTopLocator = this.page.locator('div[slot="dropdown-items"] a', {
             has: this.page.locator('span', { hasText: 'Top' })
         });

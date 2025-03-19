@@ -11,7 +11,3 @@ Given('I navigate to the Reddit registration page', async function (this: World)
 Given('I sign in', async function (this: World) {
     await this.redditRegistrationPage.signIn();
 });
-
-When('I enter valid registration details', async function (this: World) {
-    await this.redditRegistrationPage.signUp("test.user@test.com");
-});

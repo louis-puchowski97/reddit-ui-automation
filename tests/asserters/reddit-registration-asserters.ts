@@ -1,7 +1,9 @@
 import { expect } from '@playwright/test';
-import { RedditRegistrationPage } from '../../page-objects/reddit-registration-page.ts';
+import { RedditHomePage } from '../../page-objects/reddit-home-page.ts';
 
 export class RedditRegistrationAsserters {
-  async assertAccountHasBeenCreated() {
+  async assertAccountHasBeenCreated(redditHomePage: RedditHomePage) {
+    await expect(redditHomePage.userIcon).toBeVisible();
+    await expect(redditHomePage.sortByButtonLocator("Best")).toBeVisible();
   }
 }

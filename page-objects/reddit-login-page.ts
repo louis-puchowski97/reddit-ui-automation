@@ -72,63 +72,63 @@ export class RedditLoginPage {
         let username = this.generateRandomString(10);
         let password = this.generateRandomString(12);
 
-        // while (registerError) {
-        //     let success = false;
+        while (registerError) {
+            let success = false;
             
-        //     await this.signUpLink.click();
-        //     await this.emailInput.fill(`${username}@example.com`);
-        //     await this.registerEmailContinueButton.click();
-        //     await this.skipVerificationButton.click();
-        //     await this.registerUsernameInput.fill(username);
-        //     await this.registerPasswordInput.fill(password);
+            await this.signUpLink.click();
+            await this.emailInput.fill(`${username}@example.com`);
+            await this.registerEmailContinueButton.click();
+            await this.skipVerificationButton.click();
+            await this.registerUsernameInput.fill(username);
+            await this.registerPasswordInput.fill(password);
 
-        //     await this.registerUserContinueButton.waitFor({state: 'visible', timeout: 5000});
-        //     await this.registerUserContinueButton.click();
+            await this.registerUserContinueButton.waitFor({state: 'visible', timeout: 5000});
+            await this.registerUserContinueButton.click();
 
-        //     const usernameError = await this.page.locator('text=Username is taken').isVisible();
+            const usernameError = await this.page.locator('text=Username is taken').isVisible();
 
-        //     if (!usernameError) {
-        //         success = true;
-        //     }
+            if (!usernameError) {
+                success = true;
+            }
 
-        //     while (!success) {
-        //         username = this.generateRandomString(10);
+            while (!success) {
+                username = this.generateRandomString(10);
 
-        //         await this.registerUsernameInput.fill(username);
-        //         await this.registerPasswordInput.fill(password);
-        //         await this.registerUserContinueButton.click();
+                await this.registerUsernameInput.fill(username);
+                await this.registerPasswordInput.fill(password);
+                await this.registerUserContinueButton.click();
 
-        //         // Check if the username is taken (wait for error message or continue)
-        //         const usernameError = await this.page.locator('text=Username is taken').isVisible();
+                // Check if the username is taken (wait for error message or continue)
+                const usernameError = await this.page.locator('text=Username is taken').isVisible();
 
-        //         if (!usernameError) {
-        //             success = true;
-        //         }
-        //     }
+                if (!usernameError) {
+                    success = true;
+                }
+            }
             
-        //     await this.page.waitForTimeout(2000);
-        //     registerError = await this.registerError.isVisible();
+            await this.page.waitForTimeout(2000);
+            registerError = await this.registerError.isVisible();
             
-        //     if (registerError) {
-        //         await this.page.reload();
-        //         username = this.generateRandomString(10);
-        //         password = this.generateRandomString(12);
-        //     }
-        // }
+            if (registerError) {
+                await this.page.reload();
+                username = this.generateRandomString(10);
+                password = this.generateRandomString(12);
+            }
+        }
 
-        // await this.skipVerificationButton.waitFor({state: 'visible', timeout: 10000});
-        // await this.skipVerificationButton.click();
+        await this.skipVerificationButton.waitFor({state: 'visible', timeout: 10000});
+        await this.skipVerificationButton.click();
         
-        // await this.firstInterestButton.waitFor({state: 'visible', timeout: 10000});
-        // await this.firstInterestButton.click();
+        await this.firstInterestButton.waitFor({state: 'visible', timeout: 10000});
+        await this.firstInterestButton.click();
 
-        // await this.registerUserContinueButton.waitFor({state: 'visible', timeout: 10000});
-        // await this.registerUserContinueButton.click();
+        await this.registerUserContinueButton.waitFor({state: 'visible', timeout: 10000});
+        await this.registerUserContinueButton.click();
 
-        // await this.page.waitForFunction(() => {
-        //     const isOnLoginPage = window.location.href.includes('login'); // Use `window.location.href` instead of `this.page.url()`
-        //     return !isOnLoginPage; // Return the result to avoid break usage
-        // }, { timeout: 5000 });
+        await this.page.waitForFunction(() => {
+            const isOnLoginPage = window.location.href.includes('login'); // Use `window.location.href` instead of `this.page.url()`
+            return !isOnLoginPage; // Return the result to avoid break usage
+        }, { timeout: 5000 });
 
         // Store credentials in environment variables for later use
         process.env.REDDIT_USERNAME = username;

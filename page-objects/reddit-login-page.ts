@@ -4,7 +4,7 @@ import { RedditHomePage } from './reddit-home-page';
 
 
 export class RedditLoginPage {
-    private readonly page: Page;
+    readonly page: Page;
     private readonly acceptAllCookiesButton: Locator;
 
     // Registration locators
@@ -14,12 +14,13 @@ export class RedditLoginPage {
     private readonly registerPasswordInput: Locator;
     private readonly registerEmailContinueButton: Locator;
     private readonly registerUserContinueButton: Locator;
+    private readonly emailSentMessage: Locator;
 
     // Login locators
     private readonly loginUsernameInput: Locator;
     private readonly loginPasswordInput: Locator;
     private readonly signInButton: Locator;
-    private readonly welcomBackMessage: Locator;
+    private readonly welcomeBackMessage: Locator;
 
     // Navigation & action buttons
     private readonly loginButton: Locator;
@@ -39,13 +40,14 @@ export class RedditLoginPage {
         this.registerEmailContinueButton = this.page.locator('button.continue');
         // this.registerUserContinueButton = this.page.locator('button[type="submit"]:not([disabled])');
         this.registerUserContinueButton = this.page.getByRole('button', { name: 'Continue' });
+        this.emailSentMessage = this.page.locator('faceplate-toast:text-is("Email sent.")');
         // getByRole('button', { name: 'Continue' })
 
         // Login locators
         this.loginUsernameInput = this.page.locator('input[name="username"]');
         this.loginPasswordInput = this.page.locator('input[name="password"]');
-        this.signInButton = this.page.locator('button.login');
-        this.welcomBackMessage = this.page.locator('h1:has-text("Welcome back!"]');
+        this.signInButton = this.page.locator('button.login:not([disabled])');
+        this.welcomeBackMessage = this.page.locator('h1:has-text("Welcome back!"]');
 
         // Navigation buttons
         this.loginButton = this.page.locator('#login-button');
@@ -61,13 +63,17 @@ export class RedditLoginPage {
         await this.loginUsernameInput.waitFor({ state: 'visible' });
     }
 
-    // Generate a random string
-    private generateRandomString(length: number): string {
-        return cryptoRandomBytes(length).toString('hex').slice(0, length);
+    async acceptAllCookies() {
+        await this.acceptAllCookiesButton.waitFor({ state: 'visible' });
+        await this.page.waitForTimeout(2000);
+        await this.acceptAllCookiesButton.click();
     }
 
     // Register a new account with a retry mechanism for username uniqueness
     async register(): Promise<{ username: string, password: string }> {
+        await this.page.reload();
+        await this.page.waitForLoadState('networkidle');
+
         let registerError = true;
         let username = this.generateRandomString(10);
         let password = this.generateRandomString(12);
@@ -75,6 +81,7 @@ export class RedditLoginPage {
         while (registerError) {
             let success = false;
             
+            await this.signUpLink.waitFor({ state: 'visible', timeout: 5000 });
             await this.signUpLink.click();
             await this.emailInput.fill(`${username}@example.com`);
             await this.registerEmailContinueButton.click();
@@ -96,6 +103,9 @@ export class RedditLoginPage {
 
                 await this.registerUsernameInput.fill(username);
                 await this.registerPasswordInput.fill(password);
+                
+                await this.page.waitForLoadState('networkidle');
+
                 await this.registerUserContinueButton.click();
 
                 // Check if the username is taken (wait for error message or continue)
@@ -116,18 +126,18 @@ export class RedditLoginPage {
             }
         }
 
-        await this.skipVerificationButton.waitFor({state: 'visible', timeout: 10000});
+        await this.skipVerificationButton.waitFor({ state: 'visible', timeout: 10000 });
         await this.skipVerificationButton.click();
         
-        await this.firstInterestButton.waitFor({state: 'visible', timeout: 10000});
+        await this.firstInterestButton.waitFor({ state: 'visible', timeout: 10000 });
         await this.firstInterestButton.click();
 
-        await this.registerUserContinueButton.waitFor({state: 'visible', timeout: 10000});
+        await this.registerUserContinueButton.waitFor({ state: 'visible', timeout: 10000 });
         await this.registerUserContinueButton.click();
 
         await this.page.waitForFunction(() => {
-            const isOnLoginPage = window.location.href.includes('login'); // Use `window.location.href` instead of `this.page.url()`
-            return !isOnLoginPage; // Return the result to avoid break usage
+            const isOnLoginPage = window.location.href.includes('login');
+            return !isOnLoginPage;
         }, { timeout: 5000 });
 
         // Store credentials in environment variables for later use
@@ -137,47 +147,41 @@ export class RedditLoginPage {
         return { username, password };
     }
 
-    async signIn(retries = 3) {
+
+
+    async signIn(retries = 2) {
+        await this.page.reload();
+        await this.page.waitForLoadState('networkidle');
+
         if (retries === 0) {
             throw new Error('Login failed after multiple attempts.');
         }
-        
-        // await this.page.goto(`${this.page.context().baseURL()}/login`);
-        await this.page.goto('https://www.reddit.com/login');
-        await this.page.waitForLoadState('networkidle');
-        await this.acceptAllCookiesButton.click();
 
+        await this.loginUsernameInput.waitFor({state: 'visible', timeout: 5000});
         await this.loginUsernameInput.fill(process.env.REDDIT_USERNAME || '');
         await this.loginPasswordInput.fill(process.env.REDDIT_PASSWORD || '');
-
-        
-        await this.page.waitForFunction(
-            `document.querySelector("button.login") && !document.querySelector("button.login").disabled`,
-            { timeout: 2000 }
-        );
-        
         await this.signInButton.click();
         
         try {
-            await this.page.waitForFunction(() => {
-                const isOnLoginPage = window.location.href.includes('login'); // Use `window.location.href` instead of `this.page.url()`
-                return !isOnLoginPage; // Return the result to avoid break usage
-            }, { timeout: 5000 });
+            // const url = await this.page.url().includes('login');
+            // await this.page.waitForFunction(url), { timeout: 5000 });
+            await this.page.waitForURL(/^(?!.*login).*$/, { timeout: 5000 });
+            
         } catch (error) {
             if (retries > 0) {
                 console.log(`Login attempt failed. Retries left: ${retries - 1}`);
+                await this.page.reload();
+                await this.page.waitForLoadState('networkidle');
                 await this.signIn(retries - 1); // Retry with one less attempt
             } else {
                 console.log('Max retries reached. Login attempt failed.');
             }
         }
-
-        // await this.page.waitForURL(/^(?!.*login).*$/);
     }
 
     // Method to navigate to the home page
     async goToHomePage(): Promise<RedditHomePage> {
-        await this.welcomBackMessage.waitFor({state: 'visible', timeout: 5000});
+        await this.welcomeBackMessage.waitFor({state: 'visible', timeout: 5000});
         await this.page.goto('');
 
         // Wait for the home page's post sort by element to be visible
@@ -185,5 +189,26 @@ export class RedditLoginPage {
         await homePage.waitForHomePageToLoad();
 
         return homePage;
+    }
+
+    private async waitForUrlToChange(timeout: number) {
+        const startTime = Date.now();
+        let currentUrl = this.page.url();
+      
+        while (currentUrl.includes('login') && Date.now() - startTime < timeout) {
+          await this.page.waitForTimeout(500); // Wait for 500ms before checking again
+          currentUrl = this.page.url(); // Re-check the URL
+        }
+      
+        if (!currentUrl.includes('login')) {
+          console.log('URL is no longer on the login page');
+        } else {
+          console.log('Timed out while waiting for URL to change');
+        }
+      }
+
+    // Generate a random string
+    private generateRandomString(length: number): string {
+        return cryptoRandomBytes(length).toString('hex').slice(0, length);
     }
 }

@@ -1,4 +1,4 @@
-import { test } from '../utils/test-setup';
+import { test } from '@playwright/test';
 import { RedditExplorePage } from '../../page-objects/reddit-explore-page';
 import { RedditJoinCommunityAsserters } from '../asserters/reddit-join-community-asserters';
 import { RedditHomePage } from '../../page-objects/reddit-home-page';
@@ -17,7 +17,7 @@ test.describe('Joining a Reddit Community', () => {
     redditJoinCommunityAsserters = new RedditJoinCommunityAsserters();
   });
 
-  test('User joins a community', async ({ redditLoginPage }) => {
+  test('User joins a community', async () => {
     // Navigate to explore page
     await redditHomePage.goToExplorePage();
 

@@ -15,13 +15,10 @@ test.describe('Joining a Reddit Community', () => {
     redditHomePage = new RedditHomePage(page);
     redditLoginPage = new RedditLoginPage(page);
     redditRegistrationAsserters = new RedditRegistrationAsserters();
-    
-    // Navigate to the Reddit registration page before each test
-    await redditLoginPage.navigate();
   });
 
   // Test case: Register a new account and verify account creation
-  test.only('User verifies account creation', async () => {
+  test('User verifies account creation', async () => {
     
     // Register a new Reddit account
     // await redditLoginPage.register();

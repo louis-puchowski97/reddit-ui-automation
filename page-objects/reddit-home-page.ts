@@ -34,6 +34,11 @@ export class RedditHomePage {
     }
 
     // Method to sort posts by a given selection (default: 'Best')
+    async navigate(): Promise<void> {
+        await this.page.goto('/');
+    }
+
+    // Method to sort posts by a given selection (default: 'Best')
     async waitForHomePageToLoad(selection: string = "Best"): Promise<void> {
         await this.sortByButtonLocator(selection)
             .waitFor({ state: 'visible' });

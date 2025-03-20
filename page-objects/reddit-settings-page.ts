@@ -16,29 +16,29 @@ export class RedditSettingsPage {
         this.page = page;
 
         // Initialise locators with specific types
-        this.deleteAccountButton = this.page.locator('community-recommendation');
-        this.reasonForLeavingInput = this.page.locator('community-recommendation');
-        this.usernameInput = this.page.locator('community-recommendation');
-        this.passwordInput = this.page.locator('community-recommendation');
-        this.deleteAccountCheckbox = this.page.locator('community-recommendation');
-        this.confirmDeleteAccountButton = this.page.locator('community-recommendation');
+        this.deleteAccountButton = this.page.locator('div[data-testid="delete-account"]');
+        this.reasonForLeavingInput = this.page.locator('faceplate-textarea-input');
+        this.usernameInput = this.page.locator('faceplate-text-input[type="username"]');
+        this.passwordInput = this.page.locator('auth-text-input[type="username"]');
+        this.deleteAccountCheckbox = this.page.locator('faceplate-form faceplate-checkbox-input[role="checkbox"]');
+        this.confirmDeleteAccountButton = this.page.locator('rpl-modal-card button[slot="primary-button"]:not([disabled]');
     }
 
     // Navigate to Reddit homepage
     async navigate(): Promise<void> {
         await this.page.goto('https://www.reddit.com/settings/account');
-        await this.page.waitForLoadState('networkidle');
+        await this.deleteAccountButton.waitFor({ state: 'visible' });
     }
 
     // Navigate to Reddit homepage
-    async deleteAccount(username: string, password: string): Promise<void> {
+    async deleteAccount(): Promise<void> {
         await this.deleteAccountButton.waitFor({ state: 'visible' });
         await this.deleteAccountButton.click();
 
         await this.reasonForLeavingInput.waitFor({ state: 'visible' });
         await this.reasonForLeavingInput.fill('Testing is complete');
-        await this.usernameInput.fill(username);
-        await this.passwordInput.fill(password);
+        await this.usernameInput.fill(process.env.REDDIT_USERNAME);
+        await this.passwordInput.fill(process.env.REDDIT_PASSWORD);
         await this.deleteAccountCheckbox.click();
         await this.confirmDeleteAccountButton.click();
 

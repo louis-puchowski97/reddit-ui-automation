@@ -3,20 +3,21 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "cucumber-js tests/features/**/*.feature --require tests/steps/**/*.ts --require-module ts-node/register",
-    "test-headless": "cross-env HEADLESS=true cucumber-js tests/features/**/*.feature --require tests/steps/**/*.ts --require-module ts-node/register"
+    "test": "npx playwright test --reporter=html",
+    "test-headless": "cross-env HEADLESS=true playwright test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@cucumber/cucumber": "^9.0.1",
-    "@playwright/test": "^1.31.2",
+    "@playwright/test": "^1.51.1",
+    "@types/node": "^22.13.10",
     "cross-env": "^7.0.3",
     "ts-node": "^10.9.2"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
     "node-fetch": "^2.7.0"
   }
 }

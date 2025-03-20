@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { RedditSelectedPostPage } from '../../page-objects/reddit-selected-post-page.ts';
+import { RedditSelectedPostPage } from '../../page-objects/reddit-selected-post-page';
 
 export class RedditSelectedPostAsserters {
     async assertPostPageOpened(redditSelectedPostPage: RedditSelectedPostPage) {

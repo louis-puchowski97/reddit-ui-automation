@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { RedditExplorePage } from '../../page-objects/reddit-explore-page.ts';
+import { RedditExplorePage } from '../../page-objects/reddit-explore-page';
 
 export class RedditJoinCommunityAsserters {
   async assertCommunityHasBeenJoined(redditExplorePage: RedditExplorePage) {

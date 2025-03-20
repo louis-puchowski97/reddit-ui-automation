@@ -1,7 +1,8 @@
 
 # Playwright
-auth.json/
 node_modules/
+test-account.json
+/tests/auth/auth.json
 /test-results/
 /playwright-report/
 /blob-report/

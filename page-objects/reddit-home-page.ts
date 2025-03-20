@@ -1,7 +1,7 @@
 import { Page, Locator } from '@playwright/test';
 
 export class RedditHomePage {
-    private page: Page;
+    readonly page: Page;
 
     // Locators
     readonly userIcon: Locator;
@@ -13,7 +13,7 @@ export class RedditHomePage {
     constructor(page: Page) {
         this.page = page;
 
-        // Initialize locators with specific types
+        // Initialise locators with specific types
         this.userIcon = this.page.locator('#expand-user-drawer-button');
         this.sortByTopLocator = this.page.locator('div[slot="dropdown-items"] a', {
             has: this.page.locator('span', { hasText: 'Top' })
@@ -34,6 +34,12 @@ export class RedditHomePage {
     }
 
     // Method to sort posts by a given selection (default: 'Best')
+    async waitForHomePageToLoad(selection: string = "Best"): Promise<void> {
+        await this.sortByButtonLocator(selection)
+            .waitFor({ state: 'visible' });
+    }
+
+    // Method to sort posts by a given selection (default: 'Best')
     async sortPostsBySelection(selection: string = "Best"): Promise<void> {
         const sortButton = this.sortByButtonLocator(selection);
         await sortButton.waitFor({ state: 'visible' });
@@ -48,6 +54,7 @@ export class RedditHomePage {
 
     // Method to navigate to the top post after sorting
     async goToExplorePage(): Promise<void> {
+        await this.exploreButton.waitFor({ state: 'visible' })
         await this.exploreButton.click();
     }
 }

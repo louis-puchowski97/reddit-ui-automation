@@ -18,7 +18,34 @@ Follow these steps to set up and run the Reddit UI automation tests:
 - You need to create a Reddit account to use for the test. This account will be used for login and other user-specific interactions.
 - If you already have a Reddit account, you can skip this step.
 
-### 2. **Set Environment Variables**
+### 2. **Install Node.js 18.x LTS with nvm:**
+Install Node.js 18.x LTS by running:
+
+```bash
+nvm install 18
+```
+
+Set Node.js 18.x as the default version:
+
+```bash
+nvm use 18
+```
+
+Verify the installation:
+
+```bash
+node -v
+```
+
+### 3. **Install Dependencies**
+Once your environment variables are set, install the necessary dependencies by running:
+
+```bash
+npm install
+npx playwright install
+```
+
+### 4. **Set Environment Variables**
 
 After creating your Reddit account, you need to set your Reddit username and password as environment variables.
 
@@ -31,14 +58,7 @@ $env:REDDIT_PASSWORD = "your_password"  # Replace with your Reddit password
 
 This step ensures that the automation can log in to Reddit using your credentials.
 
-### 3. **Install Dependencies**
-Once your environment variables are set, install the necessary dependencies by running:
-
-```bash
-npm install
-```
-
-### 4. **Run the Tests**
+### 5. **Run the Tests**
 Finally, run the tests using the following command:
 
 ```bash

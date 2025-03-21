@@ -51,7 +51,7 @@ export class RedditSelectedPostPage {
         this.downvoteButton = page.getByRole('button', { name: 'Downvote' }).first();
         this.commentsButton = page.locator('button[name="comments-action-button"]');
         this.giveAwardButton = page.getByRole('button', { name: 'Give award' }).first();
-        this.shareButton = page.getByRole('button', { name: 'Share' });
+        this.shareButton = page.getByRole('button', { name: 'Share' }).first();
     }
 
     public async getPageURL(): Promise<string> {

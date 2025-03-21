@@ -1,10 +1,9 @@
 import { Page, Locator } from '@playwright/test';
 
 export class RedditHomePage {
-    readonly page: Page;
+    private readonly page: Page;
 
-    // Locators
-    readonly userIcon: Locator;
+    // Locatorss
     private readonly sortByTopLocator: Locator;
     private readonly sortByButtonLocator: (selection: string) => Locator;
     private readonly topPostLocator: Locator;
@@ -13,8 +12,7 @@ export class RedditHomePage {
     constructor(page: Page) {
         this.page = page;
 
-        // Initialise locators with specific types
-        this.userIcon = this.page.locator('#expand-user-drawer-button');
+        // Initialise locators with specific typess
         this.sortByTopLocator = this.page.locator('div[slot="dropdown-items"] a', {
             has: this.page.locator('span', { hasText: 'Top' })
         });

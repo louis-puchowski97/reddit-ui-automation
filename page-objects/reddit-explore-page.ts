@@ -1,7 +1,7 @@
 import { Page, Locator } from '@playwright/test';
 
 export class RedditExplorePage {
-    private page: Page;
+    private readonly page: Page;
 
     // Locators
     readonly firstJoinButton: Locator;

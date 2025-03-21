@@ -2,23 +2,23 @@ import { Page, Locator } from '@playwright/test';
 import { randomBytes as cryptoRandomBytes } from 'crypto';
 
 export class RedditLoginPage {
-    private page: Page;
+    private readonly page: Page;
 
     // Login locators
-    readonly loginUsernameInput: Locator;
-    readonly loginPasswordInput: Locator;
-    readonly loginButton: Locator;
+    private readonly loginUsernameInput: Locator;
+    private readonly loginPasswordInput: Locator;
+    private readonly loginButton: Locator;
 
     // Registration locators
-    readonly emailInput: Locator;
-    readonly skipVerificationButton: Locator;
-    readonly registerUsernameInput: Locator;
-    readonly registerPasswordInput: Locator;
+    private readonly emailInput: Locator;
+    private readonly skipVerificationButton: Locator;
+    private readonly registerUsernameInput: Locator;
+    private readonly registerPasswordInput: Locator;
     readonly registerUsernameValidIcon: Locator;
     readonly registerPasswordValidIcon: Locator;
     readonly registerUsernameInvalidIcon: Locator;
     readonly registerPasswordInvalidIcon: Locator;
-    readonly registerEmailContinueButton: Locator;
+    private readonly registerEmailContinueButton: Locator;
     readonly registerUserContinueButton: Locator;
 
     // Navigation & action buttons

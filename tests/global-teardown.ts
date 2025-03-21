@@ -5,6 +5,6 @@ export default async function globalTeardown() {
 
   if (fs.existsSync(authFilePath)) {
     fs.writeFileSync(authFilePath, '{}'); // Overwrites the file with an empty JSON object
-    console.log('✅ Cleared auth.json after tests.');
+    console.log('Cleared auth.json after tests.');
   }
 }

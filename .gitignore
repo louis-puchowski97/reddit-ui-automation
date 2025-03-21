@@ -1,8 +1,8 @@
 
 # Playwright
 node_modules/
+package-lock.json
 test-account.json
-/tests/auth/auth.json
 /test-results/
 /playwright-report/
 /blob-report/

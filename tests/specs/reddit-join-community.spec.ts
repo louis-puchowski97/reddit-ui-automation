@@ -33,7 +33,7 @@ test.describe('Joining a Reddit Community', () => {
     await browser.close();
   });
 
-  test('User joins a community', async () => {
+  test.only('User joins a community', async () => {
     await test.step('Navigate to the home page', async () => {
       await redditHomePage.navigate();
     });

@@ -17,7 +17,7 @@ export class RedditSettingsPage {
 
         // Initialise locators with specific types
         this.deleteAccountButton = this.page.locator('div[data-testid="delete-account"]');
-        this.reasonForLeavingInput = this.page.locator('faceplate-textarea-input');
+        this.reasonForLeavingInput = this.page.locator('span.input-boundary-box');
         this.usernameInput = this.page.locator('faceplate-text-input[type="username"]');
         this.passwordInput = this.page.locator('auth-text-input[type="username"]');
         this.deleteAccountCheckbox = this.page.locator('faceplate-form faceplate-checkbox-input[role="checkbox"]');

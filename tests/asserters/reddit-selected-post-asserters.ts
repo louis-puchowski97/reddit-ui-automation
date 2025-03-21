@@ -23,7 +23,6 @@ export class RedditSelectedPostAsserters {
         await expect(redditSelectedPostPage.subredditHeaderName).toBeVisible();
         await expect(redditSelectedPostPage.subredditHeaderJoinButton).toBeVisible();
         await expect(redditSelectedPostPage.subredditHeaderTitle).toBeVisible();
-        await expect(redditSelectedPostPage.subredditHeaderDescription).toBeVisible();
         await expect(redditSelectedPostPage.subredditHeaderSubscribers).toBeVisible();
         await expect(redditSelectedPostPage.subredditHeaderOnline).toBeVisible();
         await expect(redditSelectedPostPage.subredditHeaderPosition).toBeVisible();

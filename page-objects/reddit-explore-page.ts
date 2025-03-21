@@ -22,19 +22,8 @@ export class RedditExplorePage {
         await this.firstJoinButton.waitFor({ state: 'visible' });
 
         await this.page.reload();
-        await this.page.waitForLoadState('networkidle');
         
         // Wait for the 'Join' button to be visible
-        await this.firstJoinButton.waitFor({ state: 'visible' });
-
-        // If needed, you could add a check here before reloading
-        // For instance, only reload if the button isn't visible or disabled
-        if (await this.firstJoinButton.isVisible()) {
-            // If the button is visible, click on it to join the community
-            await this.firstJoinButton.click();
-        } else {
-            // Handle cases where the button is not visible (e.g., try again, log error, etc.)
-            console.log('Join button is not visible or disabled.');
-        }
+        await this.firstJoinButton.click();
     }
 }

@@ -1,13 +1,16 @@
 import { expect } from '@playwright/test';
-import { RedditHomePage } from '../../page-objects/reddit-home-page';
+import { RedditLoginPage } from '../../page-objects/reddit-login-page';
 
 export class RedditRegistrationAsserters {
-    async assertPostPageOpened(redditHomePage: RedditHomePage) {
-      await redditHomePage.page.waitForURL(/^(?!.*login).*$/);
-    }
-
-  async assertAccountHasBeenCreated(redditHomePage: RedditHomePage) {
-    await expect(redditHomePage.userIcon).toBeVisible();
-    await expect(redditHomePage.sortByButtonLocator("Best")).toBeVisible();
+  async assertRegistrationDataIsValid(loginPage: RedditLoginPage) {
+    await expect(loginPage.registerUsernameValidIcon).toBeVisible();
+    await expect(loginPage.registerPasswordValidIcon).toBeVisible();
+    await expect(loginPage.registerUserContinueButton).toBeVisible();
+  }
+  
+  async assertRegistrationDataIsInvalid(loginPage: RedditLoginPage) {
+    await expect(loginPage.registerUsernameInvalidIcon).toBeVisible();
+    await expect(loginPage.registerPasswordInvalidIcon).toBeVisible();
+    await expect(loginPage.registerUserContinueButton).toBeDisabled();
   }
 }

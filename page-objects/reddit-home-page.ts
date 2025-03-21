@@ -50,6 +50,8 @@ export class RedditHomePage {
         await sortButton.waitFor({ state: 'visible' });
         await sortButton.click();
         await this.sortByTopLocator.click();
+        await this.page.reload();
+        await this.topPostLocator.waitFor({ state: 'visible' });
     }
 
     // Method to navigate to the top post after sorting

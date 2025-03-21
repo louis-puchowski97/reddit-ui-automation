@@ -8,8 +8,7 @@ export default defineConfig({
   timeout: 60000,
   use: {
     baseURL: 'https://www.reddit.com',  // Base URL for all tests
-    headless: process.env.HEADLESS === 'true', // Use HEADLESS env variable
-    // storageState: 'tests/auth/auth.json',
+    headless: false, // Use HEADLESS env variable
     screenshot: 'only-on-failure',  // Capture screenshot on failure
     trace: 'on',  // Record trace for debugging
     browserName: 'chromium',  // Use Chromium browser for the tests

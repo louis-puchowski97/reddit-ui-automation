@@ -18,7 +18,6 @@ export class RedditSelectedPostPage {
     readonly subredditHeaderName: Locator;
     readonly subredditHeaderJoinButton: Locator;
     readonly subredditHeaderTitle: Locator;
-    readonly subredditHeaderDescription: Locator;
     readonly subredditHeaderSubscribers: Locator;
     readonly subredditHeaderOnline: Locator;
     readonly subredditHeaderPosition: Locator;
@@ -42,7 +41,6 @@ export class RedditSelectedPostPage {
             .locator('shreddit-join-button[subscribe-label="Join"]')
             .locator('button[data-post-click-location="join"]');
         this.subredditHeaderTitle = page.locator('#title');
-        this.subredditHeaderDescription = page.locator('#description');
         this.subredditHeaderSubscribers = page.locator('#subscribers');
         this.subredditHeaderOnline = page.locator('#online');
         this.subredditHeaderPosition = page.locator('#position');

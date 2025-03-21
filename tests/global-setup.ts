@@ -12,11 +12,11 @@ async function globalSetup() {
     
         // Now, call the deleteAccount function
         const loginPage = new RedditLoginPage(page);
-        await loginPage.navigate();
-        await loginPage.register();
+        await loginPage.navigateToReddit();
+        await loginPage.login();
 
     // // Save authentication state
-    await loginPage.page.context().storageState({ path: 'tests/auth/auth.json' });
+    await loginPage.saveStorageState();
     await browser.close();
 }
 

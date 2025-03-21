@@ -6,7 +6,7 @@ export class RedditHomePage {
     // Locators
     readonly userIcon: Locator;
     private readonly sortByTopLocator: Locator;
-    readonly sortByButtonLocator: (selection: string) => Locator;
+    private readonly sortByButtonLocator: (selection: string) => Locator;
     private readonly topPostLocator: Locator;
     private readonly exploreButton: Locator;
 

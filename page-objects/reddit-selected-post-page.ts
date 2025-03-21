@@ -1,7 +1,7 @@
 import { Page, Locator } from '@playwright/test';
 
 export class RedditSelectedPostPage {
-    readonly page: Page;
+    private readonly page: Page;
 
     readonly postTitle: Locator;
     readonly communityInformation: Locator;
@@ -47,10 +47,14 @@ export class RedditSelectedPostPage {
         this.subredditHeaderPosition = page.locator('#position');
 
         // Action buttons
-        this.upvoteButton = page.getByRole('button', { name: 'Upvote' });
-        this.downvoteButton = page.getByRole('button', { name: 'Downvote' });
+        this.upvoteButton = page.getByRole('button', { name: 'Upvote' }).first();
+        this.downvoteButton = page.getByRole('button', { name: 'Downvote' }).first();
         this.commentsButton = page.locator('button[name="comments-action-button"]');
-        this.giveAwardButton = page.getByRole('button', { name: 'Give award' });
+        this.giveAwardButton = page.getByRole('button', { name: 'Give award' }).first();
         this.shareButton = page.getByRole('button', { name: 'Share' });
+    }
+
+    public async getPageURL(): Promise<string> {
+        return this.page.url();
     }
 }

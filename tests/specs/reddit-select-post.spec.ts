@@ -40,7 +40,6 @@ test.describe('Joining a Reddit Community', () => {
   });
 
   test('User clicks on the first post when sorted by Top', async () => {
-    // Use test.step() to describe actions clearly
     await test.step('Navigate to the homepage', async () => {
       await redditHomePage.navigate();
     });

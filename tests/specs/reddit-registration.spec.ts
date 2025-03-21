@@ -8,12 +8,9 @@ test.describe('Reddit registration automation', () => {
   let page: Page;
 
   test.beforeEach(async () => {
-
     // Ensure we start fresh for each test
     browser = await chromium.launch({ headless: false });
-    context = await browser.newContext({
-      // storageState: { cookies: [], localStorage: [] } // Clear everything
-    });
+    context = await browser.newContext();
     page = await context.newPage();
     
     const loginPage = new RedditLoginPage(page);
@@ -62,7 +59,8 @@ test.describe('Reddit registration automation', () => {
     });
 
     await test.step('Enter invalid username and password', async () => {
-      await loginPage.fillUsernameAndPassword(" ", "Short"); // Invalid username and short password
+      // Invalid username and short password
+      await loginPage.fillUsernameAndPassword(" ", "Short");
     });
 
     await test.step('Assert credentials are invalid', async () => {

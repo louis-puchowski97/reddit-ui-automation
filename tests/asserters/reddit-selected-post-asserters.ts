@@ -7,7 +7,11 @@ export class RedditSelectedPostAsserters {
      * The URL should match the expected pattern for post pages.
      */
     async assertPostPageOpened(redditSelectedPostPage: RedditSelectedPostPage) {
-        await expect(redditSelectedPostPage.page).toHaveURL(/\/r\/.+\/comments\/.+/);
+          // Get the URL using the public method
+        const url = await redditSelectedPostPage.getPageURL();
+
+        // Assert that the URL matches the expected pattern
+        expect(url).toMatch(/\/r\/.+\/comments\/.+/);
     }
     
     /**
